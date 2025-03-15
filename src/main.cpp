@@ -53,15 +53,41 @@ void loop() {
 // Function to connect to WiFi
 void setupWiFi() {
     WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, password);
 
-    configTime(0, 0, "pool.ntp.org");
-    setenv("TZ", timezone, 0);
-
-    while (WiFi.status() != WL_CONNECTED) {
+    // Attempt to connect to primary WiFi network
+    WiFi.begin(primary_ssid, primary_password);
+    Serial.print("Connecting to primary WiFi");
+    for (int i = 0; i < 20; i++) {
+        if (WiFi.status() == WL_CONNECTED) {
+            Serial.println("\nConnected to primary WiFi");
+            break;
+        }
         delay(500);
         Serial.print(".");
     }
+
+    // If not connected, attempt to connect to backup WiFi network
+    if (WiFi.status() != WL_CONNECTED) {
+        WiFi.begin(backup_ssid, backup_password);
+        Serial.print("\nConnecting to backup WiFi");
+        for (int i = 0; i < 20; i++) {
+            if (WiFi.status() == WL_CONNECTED) {
+                Serial.println("\nConnected to backup WiFi");
+                break;
+            }
+            delay(500);
+            Serial.print(".");
+        }
+    }
+
+    // If still not connected, print an error message
+    if (WiFi.status() != WL_CONNECTED) {
+        Serial.println("\nFailed to connect to WiFi");
+        return;
+    }
+
+    configTime(0, 0, "pool.ntp.org");
+    setenv("TZ", timezone, 0);
 
     Serial.println("");
     Serial.println("\nWiFi connected.");
