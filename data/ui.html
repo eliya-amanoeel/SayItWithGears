@@ -169,19 +169,21 @@
         function switchMode() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/switchMode', true);
-            xhr.send();
-            xhr.onload = function () {
-                document.getElementById('currentMode').innerText = xhr.responseText;
-                if (xhr.responseText === 'Clock') {
-                    document.getElementById('number-section').style.display = 'none';
-                    document.getElementById('clock').style.display = 'block';
-                    document.getElementById('animation').style.display = 'inline-block';
-                } else {
-                    document.getElementById('number-section').style.display = 'block';
-                    document.getElementById('clock').style.display = 'none';
-                    document.getElementById('animation').style.display = 'none';
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById('currentMode').innerText = xhr.responseText;
+                    if (xhr.responseText === 'Clock') {
+                        document.getElementById('number-section').style.display = 'none';
+                        document.getElementById('clock').style.display = 'block';
+                        document.getElementById('animation').style.display = 'inline-block';
+                    } else {
+                        document.getElementById('number-section').style.display = 'block';
+                        document.getElementById('clock').style.display = 'none';
+                        document.getElementById('animation').style.display = 'none';
+                    }
                 }
-            }
+            };
+            xhr.send();
         }
 
         function updateClock() {

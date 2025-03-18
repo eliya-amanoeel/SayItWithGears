@@ -195,13 +195,8 @@ void handleSet() {
 
 // Function to handle the switch mode endpoint
 void handleSwitchMode() {
-    if (currentMode == Tuning) {
-        currentMode = Clock;
-        server.send(200, "text/plain", "Clock");
-    } else {
-        currentMode = Tuning;
-        server.send(200, "text/plain", "Tuning");
-    }
+    currentMode = (currentMode == Tuning) ? Clock : Tuning;
+    server.send(200, "text/plain", (currentMode == Clock) ? "Clock" : "Tuning");
 }
 
 // Function to handle the get time endpoint
