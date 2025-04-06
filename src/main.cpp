@@ -55,7 +55,7 @@ void setupWiFi() {
     WiFi.mode(WIFI_STA);
 
     // Attempt to connect to primary WiFi network
-    WiFi.begin(primary_ssid, primary_password);
+    WiFi.begin(ssid, password);
     Serial.print("Connecting to primary WiFi");
     for (int i = 0; i < 20; i++) {
         if (WiFi.status() == WL_CONNECTED) {
@@ -64,20 +64,6 @@ void setupWiFi() {
         }
         delay(500);
         Serial.print(".");
-    }
-
-    // If not connected, attempt to connect to backup WiFi network
-    if (WiFi.status() != WL_CONNECTED) {
-        WiFi.begin(backup_ssid, backup_password);
-        Serial.print("\nConnecting to backup WiFi");
-        for (int i = 0; i < 20; i++) {
-            if (WiFi.status() == WL_CONNECTED) {
-                Serial.println("\nConnected to backup WiFi");
-                break;
-            }
-            delay(500);
-            Serial.print(".");
-        }
     }
 
     // If still not connected, print an error message
